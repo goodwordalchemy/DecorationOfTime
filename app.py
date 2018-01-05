@@ -101,6 +101,7 @@ def spotify_authorize():
 
     return redirect(authorize_url)
 
+
 @app.route('/callback/spotify')
 def spotify_callback():
     if not current_user.is_anonymous:
@@ -124,7 +125,14 @@ def spotify_callback():
 
     login_user(user, True)
 
+    return redirect(url_for('spotify_scrape_data'))
+
+
+@app.route('/scrape_data/spotify')
+@login_required
+def spotify_scrape_data():
     return redirect(url_for('welcome'))
+
 
 @app.route('/welcome')
 @login_required

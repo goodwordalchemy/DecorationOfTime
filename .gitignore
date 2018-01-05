@@ -1,3 +1,5 @@
 config.py
 *.swp
 __pycache__
+data/*
+*.pickle
