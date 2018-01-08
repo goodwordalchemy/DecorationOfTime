@@ -28,10 +28,14 @@ This app allows people who give me permission to scrape the track data from play
 '''
 
 from flask import Flask, redirect, render_template, request, url_for
-from flask_sqlalchemy import SQLAlchemy
 from flask_login import current_user, login_user, LoginManager, login_required, logout_user, UserMixin
+from flask_pymongo import PyMongo
+from flask_sqlalchemy import SQLAlchemy
 from gwa_spotify_api import SpotifyAuthAPI
 from rauth import OAuth2Service
+
+from config import MONGODB_CONFIG, SPOTIFY_API_CONFIG
+from scrape_user_playlists import scrape_user_playlists, user_playlists_to_str
 
 '''
 The SPOTIFY_API_CONFIG is used to authenticate the app with spotify.  It should have the following form:
@@ -44,7 +48,6 @@ SPOTIFY_API_CONFIG = {
 }
 ```
 '''
-from config import SPOTIFY_API_CONFIG
 
 SPOTIFY_AUTH_URL = 'https://accounts.spotify.com/authorize'
 SPOTIFY_TOKEN_URL = 'https://accounts.spotify.com/api/token'
@@ -63,6 +66,10 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret key!'
 
 db = SQLAlchemy(app)
+
+app.config['MONGO_URI'] = MONGODB_CONFIG['CONNECTION_STRING']
+mongo = PyMongo(app)
+
 lm = LoginManager(app)
 
 
@@ -108,6 +115,7 @@ def spotify_callback():
         return redirect(url_for('index'))
 
     auth_code = request.args['code']
+
     token = spotify_api.get_access_token(auth_code)
     spotify_api.assign_token(token=token)
 
@@ -131,6 +139,15 @@ def spotify_callback():
 @app.route('/scrape_data/spotify')
 @login_required
 def spotify_scrape_data():
+    user_playlists = scrape_user_playlists(spotify_api)
+
+    user = mongo.db.users.find_one({'user_id': user_playlists['user_id']})
+    if not user:
+        result = mongo.db.users.insert_one(user_playlists)
+        print('inserted one item with id: {}'.format(result.inserted_id))
+    else:
+        print('user already exists')
+
     return redirect(url_for('welcome'))
 
 
