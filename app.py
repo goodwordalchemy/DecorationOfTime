@@ -154,7 +154,7 @@ def spotify_scrape_data():
 @app.route('/welcome')
 @login_required
 def welcome():
-    return str(spotify_api.get('me'))
+    return render_template('welcome.html'),
 
 
 if __name__ == '__main__':
