@@ -68,6 +68,8 @@ spotify_api = SpotifyAuthAPI(assign_token=False, config=SPOTIFY_API_CONFIG, scop
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret key!'
 
+app.logger.info('DEBUG: app is initialized')
+
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL') or default_database_url
 
@@ -93,6 +95,7 @@ def load_user(id):
 
 @app.route('/')
 def index():
+    app.logger.info('DEBUG: arrived at the index url')
     return render_template('index.html')
 
 
