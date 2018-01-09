@@ -8,6 +8,7 @@ Flask==0.12.2
 Flask-Login==0.4.1
 Flask-PyMongo==0.5.1
 Flask-SQLAlchemy==2.3.2
+gunicorn==19.7.1
 -e git+https://github.com/goodwordalchemy/spotify-api.git@d1202dbc3b3560efb63a2e13098ee1c6238a34ab#egg=gwa_spotify_api
 idna==2.6
 ipdb==0.10.3
@@ -21,6 +22,7 @@ parso==0.1.1
 pexpect==4.3.1
 pickleshare==0.7.4
 prompt-toolkit==1.0.15
+psycopg2==2.7.3.2
 ptyprocess==0.5.2
 Pygments==2.2.0
 pymongo==3.6.0
