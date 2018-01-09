@@ -17,6 +17,7 @@ class DevelopmentConfig(Config):
 class ProductionConfig(Config):
     MONGO_URI =  os.environ.get('MONGODB_URI')
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
+    SPOTIFY_CALLBACK_URL = 'https://playlist-pattern-scraper.herokuapp.com/callback/spotify'
 
 
 config = {
