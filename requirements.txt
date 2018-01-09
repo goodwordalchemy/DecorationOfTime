@@ -9,7 +9,7 @@ Flask-Login==0.4.1
 Flask-PyMongo==0.5.1
 Flask-SQLAlchemy==2.3.2
 gunicorn==19.7.1
--e git+https://github.com/goodwordalchemy/spotify-api.git@8726a862269ee5d5eba0021ebae962c234086e56#egg=gwa_spotify_api
+-e git+https://github.com/goodwordalchemy/spotify-api.git@fb8b1607a00b4a769f0bbcf4c70db2467c282635#egg=gwa_spotify_api
 idna==2.6
 ipdb==0.10.3
 ipython==6.2.1
