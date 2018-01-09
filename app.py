@@ -26,7 +26,7 @@ This app allows people who give me permission to scrape the track data from play
 1. A personalized playlist of music recommendations based on the music of other users who have similar taste in music.
 2. The satisfaction of knowing you have allowed me to learn and discover tons of great music.
 '''
-
+import os
 from flask import Flask, redirect, render_template, request, url_for
 from flask_login import current_user, login_user, LoginManager, login_required, logout_user, UserMixin
 from flask_pymongo import PyMongo
@@ -59,11 +59,17 @@ SCOPES = [
 ]
 
 
+basedir = os.path.abspath(os.path.dirname(__file__))
+default_database_url = 'sqlite:///' + os.path.join(basedir, 'data.sqlite')
+
 spotify_api = SpotifyAuthAPI(assign_token=False, config=SPOTIFY_API_CONFIG, scopes_list=SCOPES)
 
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret key!'
+
+
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL') or default_database_url
 
 db = SQLAlchemy(app)
 
