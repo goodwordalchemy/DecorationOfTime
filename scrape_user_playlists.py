@@ -3,7 +3,6 @@ import re
 
 from gwa_spotify_api import SpotifyAuthAPI
 
-from config import SPOTIFY_API_CONFIG
 
 PLAYLIST_PATTERNS = [
     r'My Shazam Tracks',
@@ -87,15 +86,3 @@ def user_playlists_to_str(user_playlists):
         output += '\n'
 
     return output
-
-
-
-
-if __name__ == '__main__':
-    spotify_api = SpotifyAuthAPI(config=SPOTIFY_API_CONFIG)
-
-    user_playlists = scrape_user_playlists(spotify_api)
-
-    playlists_str = user_playlists_to_str(user_playlists)
-
-    print(playlists_str)

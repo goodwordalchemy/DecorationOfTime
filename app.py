@@ -34,20 +34,9 @@ from flask_sqlalchemy import SQLAlchemy
 from gwa_spotify_api import SpotifyAuthAPI
 from rauth import OAuth2Service
 
-from config import MONGODB_CONFIG, SPOTIFY_API_CONFIG
+from config import config
 from scrape_user_playlists import scrape_user_playlists, user_playlists_to_str
 
-'''
-The SPOTIFY_API_CONFIG is used to authenticate the app with spotify.  It should have the following form:
-
-```
-SPOTIFY_API_CONFIG = {
-    'SPOTIFY_CLIENT_ID': <client id>,
-    'SPOTIFY_CLIENT_SECRET': <client secret key>,
-    'SPOTIFY_CALLBACK_URL': <callback url>,
-}
-```
-'''
 
 SPOTIFY_AUTH_URL = 'https://accounts.spotify.com/authorize'
 SPOTIFY_TOKEN_URL = 'https://accounts.spotify.com/api/token'
@@ -58,27 +47,26 @@ SCOPES = [
     'user-top-read',
 ]
 
-
-basedir = os.path.abspath(os.path.dirname(__file__))
-default_database_url = 'sqlite:///' + os.path.join(basedir, 'data.sqlite')
-
-spotify_api = SpotifyAuthAPI(assign_token=False, config=SPOTIFY_API_CONFIG, scopes_list=SCOPES)
-
+'''
+The `ENVIRONMENT_NAME` needs to be set to 'production' or else it defaults
+to 'development'
+'''
+config_name = os.environ.get('ENVIRONMENT_NAME') or 'development'
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'secret key!'
-
-app.logger.info('DEBUG: app is initialized')
-
-
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL') or default_database_url
+app.config.from_object(config[config_name])
 
 db = SQLAlchemy(app)
-
-app.config['MONGO_URI'] = os.environ.get('MONGODB_URI') or MONGODB_CONFIG['CONNECTION_STRING']
 mongo = PyMongo(app)
-
 lm = LoginManager(app)
+
+
+spotify_api_config = {
+    'SPOTIFY_CLIENT_ID': app.config['SPOTIFY_CLIENT_ID'],
+    'SPOTIFY_CLIENT_SECRET': app.config['SPOTIFY_CLIENT_SECRET'],
+    'SPOTIFY_CALLBACK_URL': app.config['SPOTIFY_CALLBACK_URL'],
+}
+spotify_api = SpotifyAuthAPI(assign_token=False, config=spotify_api_config, scopes_list=SCOPES)
 
 
 class User(UserMixin, db.Model):
@@ -95,7 +83,6 @@ def load_user(id):
 
 @app.route('/')
 def index():
-    app.logger.info('DEBUG: arrived at the index url')
     return render_template('index.html')
 
 

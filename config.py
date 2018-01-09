@@ -1,15 +1,25 @@
 import os
 
-SPOTIFY_API_CONFIG = {
-    'SPOTIFY_CLIENT_ID': os.environ.get('SPOTIFY_CLIENT_ID'),
-    'SPOTIFY_CLIENT_SECRET': os.environ.get('SPOTIFY_CLIENT_SECRET'),
-    'SPOTIFY_CALLBACK_URL': os.environ.get('SPOTIFY_CALLBACK_URL'),
-}
+basedir = os.path.abspath(os.path.dirname(__file__))
 
-MONGODB_CONFIG = {
-    'USERNAME': os.environ.get('MONGO_USERNAME'),
-    'PASSWORD': os.environ.get('MONGO_PASSWORD')
-}
-MONGODB_CONNECTION_STRING_FORMAT = os.environ.get('MONGODB_CONNECTION_STRING_FORMAT')
+class Config:
+    SECRET_KEY = os.environ.get('SECRET_KEY') or 'secret key!'
+    SPOTIFY_CLIENT_ID = os.environ.get('SPOTIFY_CLIENT_ID')
+    SPOTIFY_CLIENT_SECRET = os.environ.get('SPOTIFY_CLIENT_SECRET')
 
-MONGODB_CONFIG['CONNECTION_STRING'] = MONGODB_CONNECTION_STRING_FORMAT.format(**MONGODB_CONFIG)
+
+class DevelopmentConfig(Config):
+    MONGO_URI = os.environ.get('DEV_MONGODB_CONNECTION_STRING')
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'data.sqlite')
+    SPOTIFY_CALLBACK_URL = 'http://localhost:5000/callback/spotify'
+
+
+class ProductionConfig(Config):
+    MONGO_URI =  os.environ.get('MONGODB_URI')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
+
+
+config = {
+    'development': DevelopmentConfig,
+    'production': ProductionConfig
+}
