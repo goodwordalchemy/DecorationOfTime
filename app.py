@@ -75,7 +75,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL') or defaul
 
 db = SQLAlchemy(app)
 
-app.config['MONGO_URI'] = MONGODB_CONFIG['CONNECTION_STRING']
+app.config['MONGO_URI'] = os.environ.get('MONGO_URI') or MONGODB_CONFIG['CONNECTION_STRING']
 mongo = PyMongo(app)
 
 lm = LoginManager(app)
