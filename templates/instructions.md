@@ -1,6 +1,6 @@
 # Playlist Pattern Scraper
 
-This app allows people who give me permission to scrape the track data from playlists matching any of the following patterns:
+This app allows you to give me permission to download some information from your Spotify account.  In particular, it allows me to scrape the track data from playlists matching any of the following patterns:
 
     My Shazam Tracks
     Your Top Songs <year>
@@ -8,19 +8,16 @@ This app allows people who give me permission to scrape the track data from play
     Your Summer Rewind
     Discover Weekly
 
+## What's in it for you?
+
+1. In a few weeks, I will send you a personalized playlist of music recommendations based on the music of other users who have similar taste in music.
+2. The satisfaction of knowing you have allowed me to learn and discover tons of great music.
+
+
 ## How it works
 
-1. User arrives at home page.
-2. User Oauths into Spotify
-3. App scrapes playlists matching patterns listed above.  It puts the track metadata and track-playlist links into a database.
-4. User arrives at "Thank You" screen.
+1. Click the "Begin" button.
+2. Authenticate through Spotify and maybe Facebook.
+3. You're done!  I'll send you some results in a few weeks.
 
-## What I will do with the data
 
-1. I will smile ear to ear and comb through the collections of people that I already know to have outstanding taste in music.
-2. I will practice implementing music recommendation algorithms and clustering algorithms.
-
-## What does the user get out of this?
-
-1. A personalized playlist of music recommendations based on the music of other users who have similar taste in music.
-2. The satisfaction of knowing you have allowed me to learn and discover tons of great music.
