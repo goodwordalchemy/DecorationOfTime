@@ -1,2 +1,2 @@
 web: gunicorn app:app
-init: python -m db_crteate
+init: python -m db_create
