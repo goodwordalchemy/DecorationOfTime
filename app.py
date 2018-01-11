@@ -1,6 +1,5 @@
 import os
 from flask import Flask, redirect, render_template, request, url_for
-from flask_login import current_user, login_user, LoginManager, login_required, logout_user, UserMixin
 from flask_pymongo import PyMongo
 from flask_sqlalchemy import SQLAlchemy
 from gwa_spotify_api import SpotifyAuthAPI
@@ -30,7 +29,6 @@ app.config.from_object(config[config_name])
 
 db = SQLAlchemy(app)
 mongo = PyMongo(app)
-lm = LoginManager(app)
 
 
 spotify_api_config = {
@@ -41,37 +39,13 @@ spotify_api_config = {
 spotify_api = SpotifyAuthAPI(assign_token=False, config=spotify_api_config, scopes_list=SCOPES)
 
 
-class User(UserMixin, db.Model):
-    __tablename__ = 'users'
-    id = db.Column(db.Integer, primary_key=True)
-    social_id = db.Column(db.String(64), nullable=False, unique=True)
-    display_name = db.Column(db.String(64))
-
-
-@lm.user_loader
-def load_user(id):
-    return User.query.get(int(id))
-
-
 @app.route('/')
 def index():
     return render_template('index.html')
 
 
-@app.route('/logout')
-@login_required
-def logout():
-    logout_user()
-
-    return redirect(url_for('index'))
-
-
-
 @app.route('/authorize/spotify')
 def spotify_authorize():
-    if not current_user.is_anonymous:
-        return redirect(url_for('index'))
-
     authorize_url = spotify_api.get_authorize_url()
 
     return redirect(authorize_url)
@@ -79,38 +53,24 @@ def spotify_authorize():
 
 @app.route('/callback/spotify')
 def spotify_callback():
-    if not current_user.is_anonymous:
-        return redirect(url_for('index'))
-
     auth_code = request.args['code']
 
     token = spotify_api.get_access_token(auth_code)
     spotify_api.assign_token(token=token)
 
-    user_profile_info = spotify_api.get('me')
-    social_id = user_profile_info['id']
-    display_name = user_profile_info['display_name']
-
-    user = User.query.filter_by(social_id=social_id).first()
-
-    if not user:
-        user = User(social_id=social_id, display_name=display_name)
-
-        db.session.add(user)
-        db.session.commit()
-
-    login_user(user, True)
-
     return redirect(url_for('spotify_scrape_data'))
 
 
 @app.route('/scrape_data/spotify')
-@login_required
 def spotify_scrape_data():
-    user_playlists = scrape_user_playlists(spotify_api)
+    user_profile_info = spotify_api.get('me')
+    social_id = user_profile_info['id']
+    display_name = user_profile_info['display_name']
 
-    user = mongo.db.users.find_one({'user_id': user_playlists['user_id']})
+    user = mongo.db.users.find_one({'user_id': user_profile_info['social_id']})
+
     if not user:
+        user_playlists = scrape_user_playlists(spotify_api)
         result = mongo.db.users.insert_one(user_playlists)
         print('inserted one item with id: {}'.format(result.inserted_id))
     else:
@@ -120,6 +80,5 @@ def spotify_scrape_data():
 
 
 @app.route('/welcome')
-@login_required
 def welcome():
     return render_template('welcome.html'),
