@@ -10,13 +10,11 @@ class Config:
 
 class DevelopmentConfig(Config):
     MONGO_URI = os.environ.get('DEV_MONGODB_CONNECTION_STRING')
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'data.sqlite')
     SPOTIFY_CALLBACK_URL = 'http://localhost:5000/callback/spotify'
 
 
 class ProductionConfig(Config):
     MONGO_URI =  os.environ.get('MONGODB_URI')
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
     SPOTIFY_CALLBACK_URL = 'https://decoration-of-time.herokuapp.com/callback/spotify'
 
 

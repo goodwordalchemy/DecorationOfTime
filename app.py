@@ -27,7 +27,6 @@ config_name = os.environ.get('ENVIRONMENT_NAME') or 'development'
 app = Flask(__name__)
 app.config.from_object(config[config_name])
 
-db = SQLAlchemy(app)
 mongo = PyMongo(app)
 
 
@@ -67,7 +66,7 @@ def spotify_scrape_data():
     social_id = user_profile_info['id']
     display_name = user_profile_info['display_name']
 
-    user = mongo.db.users.find_one({'user_id': user_profile_info['social_id']})
+    user = mongo.db.users.find_one({'user_id': social_id})
 
     if not user:
         user_playlists = scrape_user_playlists(spotify_api)

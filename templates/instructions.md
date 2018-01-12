@@ -16,7 +16,7 @@ This app allows you to give me permission to download some information from your
 
 ## How it works
 
-1. Click the "Begin" button.
+1. Click the "Begin" button. (Then DON'T hit the back button.  This app is slow.  Be patient).
 2. Authenticate through Spotify and maybe Facebook.
 3. You're done!  I'll send you some results in a few weeks.
 
