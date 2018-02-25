@@ -9,7 +9,7 @@ class Config:
 
 
 class DevelopmentConfig(Config):
-    MONGO_URI = os.environ.get('DEV_MONGODB_CONNECTION_STRING')
+    MONGO_URI = 'mongodb://localhost:27017/playlist_pattern_scaper?authSource=admin'
     SPOTIFY_CALLBACK_URL = 'http://localhost:5000/callback/spotify'
 
 

@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 from flask import Flask, redirect, render_template, request, url_for
 from flask_pymongo import PyMongo
 from flask_sqlalchemy import SQLAlchemy
@@ -6,12 +7,8 @@ from gwa_spotify_api import SpotifyAuthAPI
 from rauth import OAuth2Service
 
 from config import config
-from scrape_user_playlists import scrape_user_playlists, user_playlists_to_str
+from scrape_user_favorites import scrape_favorites
 
-
-SPOTIFY_AUTH_URL = 'https://accounts.spotify.com/authorize'
-SPOTIFY_TOKEN_URL = 'https://accounts.spotify.com/api/token'
-SPOTIFY_API_BASE_URL = 'https://api.spotify.com'
 
 SCOPES = [
     'playlist-read-private',
@@ -69,8 +66,12 @@ def spotify_scrape_data():
     user = mongo.db.users.find_one({'user_id': social_id})
 
     if not user:
-        user_playlists = scrape_user_playlists(spotify_api)
-        result = mongo.db.users.insert_one(user_playlists)
+        user_favorites = scrape_favorites(spotify_api)
+        user_favorites.update({
+            'update_time': datetime.now(),
+            'user_id': social_id,
+        })
+        result = mongo.db.users.insert_one(user_favorites)
         print('inserted one item with id: {}'.format(result.inserted_id))
     else:
         print('user already exists')
