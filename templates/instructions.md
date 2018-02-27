@@ -11,7 +11,8 @@ In case you are interested, the app accomplishes this by programmatically reques
 
 
 ## How it works
+Important: DON'T hit the back button or refresh.  After 1 minute, you will be redirected to a confirmation page.  Please be patient.
 
-1. Click the "Begin" button. (Then DON'T hit the back button.  This app is slow.  Be patient).
+1. Click the "Begin" button. 
 2. Authenticate through Spotify and maybe Facebook.
 3. You're done!  I'll send you some results in a few weeks.
