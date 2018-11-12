@@ -87,4 +87,4 @@ def spotify_scrape_data():
 
 @app.route('/welcome')
 def welcome():
-    return render_template('welcome.html'),
+    return render_template('welcome.html')
