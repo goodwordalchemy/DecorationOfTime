@@ -4,3 +4,4 @@ data/*
 *.pickle
 .env
 data.sqlite
+venv
