@@ -3,14 +3,30 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width" />
-        <title>Playlist Scraper</title>
+        <title>Spotify Favorites Scraper</title>
     </head>
     <body>
-        <h1>Playlist Scraper</h1>
+        <h1>Spotify Favorites Scraper</h1>
 
-        <pre>{% include 'instructions.md' %}</pre>
+        <h2>What is this?</h2>
+        <p>If you click the "Begin!" button below, it will trigger a computational process that downloads some data from your spotify account. In particular, it allows me to download your artist and track affinity over the last ~1 month, ~6 months, and all time.</p>
+        <p>In case you are interested, here is the <a href="https://github.com/goodwordalchemy/DecorationOfTime">source code</a></p>
 
-        <a href="{{ url_for('spotify_authorize') }}" style="border-style: solid;">Begin!</a>
+        <h2>What's in it for me?</h2>
+        <p>I have been interested in writing music recommendation algorithms for a long time, but I don't have a dataset of user listening data to work on.  I built this app so I could get test data for an algorithm I am prototyping.</p>
+
+        <h2>What's in it for you?</h2>
+        <p>Assuming I can get enough people to let me download their data for me to actually prototype my algorithm, I'll send you a personalized playlist music recommended by my algorithm.</p>
+
+        <h2>How does it work?</h2>
+        <ul>
+            <li>Click the "Begin" button below.</li>
+            <li><em>IMPORTANT: DON'T HIT THE "BACK" BUTTON OR REFRESH THE PAGE.</em></li>
+            <li>Authenticate through Spotify and maybe Facebook.</li>
+            <li>You're done.</li>
+        </ul>
+
+        <a href="{{ url_for('spotify_authorize') }}" style="border-style: solid">Begin!</a>
 
     </body>
 </html>
