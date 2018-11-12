@@ -32,7 +32,13 @@ spotify_api_config = {
     'SPOTIFY_CLIENT_SECRET': app.config['SPOTIFY_CLIENT_SECRET'],
     'SPOTIFY_CALLBACK_URL': app.config['SPOTIFY_CALLBACK_URL'],
 }
-spotify_api = SpotifyAuthAPI(assign_token=False, config=spotify_api_config, scopes_list=SCOPES)
+
+@app.before_first_request
+def load_spotify_api():
+    global spotify_api
+    spotify_api = SpotifyAuthAPI(
+        assign_token=False, config=spotify_api_config, scopes_list=SCOPES
+    )
 
 
 @app.route('/')
