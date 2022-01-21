@@ -12,7 +12,7 @@ gunicorn==19.7.1
 -e git+https://github.com/goodwordalchemy/spotify-api.git@fb8b1607a00b4a769f0bbcf4c70db2467c282635#egg=gwa_spotify_api
 idna==2.6
 ipdb==0.10.3
-ipython==6.2.1
+ipython==7.16.3
 ipython-genutils==0.2.0
 itsdangerous==0.24
 jedi==0.11.1
